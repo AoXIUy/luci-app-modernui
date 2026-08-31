@@ -11,6 +11,9 @@ jobs:
   test-frontend:
     name: Lint, TypeCheck & Test
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: applications/luci-app-modernui/frontend
     steps:
       - uses: actions/checkout@v4
 
@@ -18,27 +21,28 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: 'npm'
-          cache-dependency-path: applications/luci-app-modernui/frontend/package-lock.json
+
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        with:
+          path: applications/luci-app-modernui/frontend/node_modules
+          key: node-modules-${{ hashFiles('applications/luci-app-modernui/frontend/package.json') }}
+          restore-keys: |
+            node-modules-
 
       - name: Install dependencies
-        working-directory: applications/luci-app-modernui/frontend
-        run: npm ci
+        run: npm install
 
       - name: Lint
-        working-directory: applications/luci-app-modernui/frontend
         run: npm run lint
 
       - name: Type check
-        working-directory: applications/luci-app-modernui/frontend
         run: npm run typecheck
 
       - name: Test
-        working-directory: applications/luci-app-modernui/frontend
         run: npm run test
 
       - name: Build
-        working-directory: applications/luci-app-modernui/frontend
         run: npm run build
 
   build-packages:
