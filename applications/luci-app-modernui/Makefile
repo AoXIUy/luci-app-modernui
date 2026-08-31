@@ -30,7 +30,7 @@ endef
 
 define Build/Compile
 	cd $(PKG_BUILD_DIR)/frontend && \
-		npm ci --prefer-offline && \
+		npm install --legacy-peer-deps && \
 		npm run typecheck && \
 		npm run build
 endef

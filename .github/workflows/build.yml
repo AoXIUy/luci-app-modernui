@@ -73,9 +73,9 @@ jobs:
       - name: Build with OpenWrt SDK
         uses: openwrt/gh-action-sdk@v8
         env:
-          ARCH: ${{ matrix.arch }}-25.10
+          ARCH: ${{ matrix.arch }}
           FEEDNAME: modernui
-          PACKAGES: luci-app-modernui luci-theme-modernui
+          PACKAGES: luci-app-modernui luci-theme-modernui modernui-console
           NO_REFRESH_CHECK: 'true'
 
       - name: Upload artifacts
