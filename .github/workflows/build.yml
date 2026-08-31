@@ -47,12 +47,6 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Upload frontend dist
-        uses: actions/upload-artifact@v4
-        with:
-          name: frontend-dist
-          path: applications/luci-app-modernui/frontend/dist/
-
   build-packages:
     name: Build OpenWrt Packages (${{ matrix.arch }})
     needs: test-frontend
@@ -76,11 +70,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Download frontend dist
-        uses: actions/download-artifact@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          name: frontend-dist
-          path: applications/luci-app-modernui/frontend/dist
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: applications/luci-app-modernui/frontend/package.json
+
+      - name: Build frontend
+        working-directory: applications/luci-app-modernui/frontend
+        run: |
+          npm install --legacy-peer-deps
+          npm run build
 
       - name: Build with OpenWrt SDK
         uses: openwrt/gh-action-sdk@v8
