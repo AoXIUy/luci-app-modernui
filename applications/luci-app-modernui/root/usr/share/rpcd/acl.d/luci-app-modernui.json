@@ -1,0 +1,43 @@
+{
+  "luci-app-modernui": {
+    "description": "ModernUI LuCI Plugin ACL",
+    "read": {
+      "ubus": {
+        "modernui": [
+          "system.getInfo",
+          "system.getLogs",
+          "network.getStatus",
+          "network.getTraffic",
+          "network.getRoutes",
+          "network.getDhcpLeases",
+          "wireless.getStatus",
+          "theme.get",
+          "routes.list"
+        ],
+        "system": ["info", "board", "log"],
+        "network.interface": ["dump"],
+        "network.wireless": ["status"],
+        "network.route": ["list"]
+      },
+      "uci": ["network", "wireless", "system", "dhcp", "modernui"]
+    },
+    "write": {
+      "ubus": {
+        "modernui": [
+          "system.setHostname",
+          "network.setInterface",
+          "wireless.setConfig",
+          "wireless.scan",
+          "theme.set",
+          "routes.setMode",
+          "console.create",
+          "console.input",
+          "console.resize",
+          "console.destroy"
+        ],
+        "network": ["reload"]
+      },
+      "uci": ["network", "wireless", "system", "modernui"]
+    }
+  }
+}

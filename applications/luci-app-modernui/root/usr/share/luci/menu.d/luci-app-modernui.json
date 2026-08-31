@@ -1,0 +1,14 @@
+{
+  "admin/modernui": {
+    "title": "ModernUI",
+    "order": 1,
+    "action": {
+      "type": "template",
+      "path": "modernui/index"
+    },
+    "acl": {
+      "groups": ["admin"],
+      "permissions": ["read"]
+    }
+  }
+}

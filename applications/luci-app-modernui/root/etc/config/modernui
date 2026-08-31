@@ -1,0 +1,13 @@
+config modernui 'global'
+	option theme 'auto'
+	option language 'zh'
+	option polling_interval '5'
+	option sidebar_collapsed '0'
+
+config dashboard 'dashboard'
+	option show_cpu '1'
+	option show_memory '1'
+	option show_temp '1'
+	option show_traffic '1'
+	option show_interfaces '1'
+	option show_dhcp '1'

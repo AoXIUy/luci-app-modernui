@@ -1,0 +1,28 @@
+{%
+  include('header');
+  const session = ctx.authsession;
+  const base_url = request.canonical;
+%}
+
+<div id="modernui-root"
+     data-session="{{ session }}"
+     data-base-url="{{ base_url }}"
+     data-luci-version="{{ luci.version ?? '0.0' }}"
+     class="min-h-screen bg-background text-foreground">
+  <!-- React app mounts here -->
+  <div id="modernui-loading" style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:system-ui;">
+    <div style="text-align:center;">
+      <div style="width:40px;height:40px;border:3px solid #e2e8f0;border-top-color:#6366f1;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 12px;"></div>
+      <p style="color:#64748b;font-size:14px;">Loading ModernUI...</p>
+    </div>
+    <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+  </div>
+</div>
+
+<!-- Vite build output -->
+<link rel="stylesheet" href="/luci-static/modernui-app/assets/index.css">
+<script type="module" src="/luci-static/modernui-app/assets/index.js"></script>
+
+{%
+  include('footer');
+%}

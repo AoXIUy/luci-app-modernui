@@ -1,0 +1,112 @@
+name: Build & Test
+
+on:
+  push:
+    branches: [main, develop]
+    tags: ['v*']
+  pull_request:
+    branches: [main]
+
+jobs:
+  test-frontend:
+    name: Lint, TypeCheck & Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: applications/luci-app-modernui/frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: applications/luci-app-modernui/frontend
+        run: npm ci
+
+      - name: Lint
+        working-directory: applications/luci-app-modernui/frontend
+        run: npm run lint
+
+      - name: Type check
+        working-directory: applications/luci-app-modernui/frontend
+        run: npm run typecheck
+
+      - name: Test
+        working-directory: applications/luci-app-modernui/frontend
+        run: npm run test
+
+      - name: Build
+        working-directory: applications/luci-app-modernui/frontend
+        run: npm run build
+
+  build-packages:
+    name: Build OpenWrt Packages (${{ matrix.arch }})
+    needs: test-frontend
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: x86_64
+            target: x86/64
+          - arch: aarch64_generic
+            target: rockchip/armv8
+          - arch: mips_24kc
+            target: ath79/generic
+          - arch: arm_cortex-a7_neon-vfpv4
+            target: ipq40xx/generic
+          - arch: aarch64_cortex-a53
+            target: mediatek/filogic
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build with OpenWrt SDK
+        uses: openwrt/gh-action-sdk@v8
+        env:
+          ARCH: ${{ matrix.arch }}-25.10
+          FEEDNAME: modernui
+          PACKAGES: luci-app-modernui luci-theme-modernui
+          NO_REFRESH_CHECK: 'true'
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: packages-${{ matrix.arch }}
+          path: bin/packages/${{ matrix.arch }}/modernui/
+
+  publish-feed:
+    name: Publish Package Feed
+    needs: build-packages
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: feed-staging
+
+      - name: Organize feed
+        run: |
+          mkdir -p public/openwrt/25.10
+          for dir in feed-staging/packages-*/; do
+            arch=$(basename "$dir" | sed 's/packages-//')
+            mkdir -p "public/openwrt/25.10/$arch"
+            cp "$dir"*.apk "public/openwrt/25.10/$arch/" 2>/dev/null || true
+            cp "$dir"*.ipk "public/openwrt/25.10/$arch/" 2>/dev/null || true
+          done
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
