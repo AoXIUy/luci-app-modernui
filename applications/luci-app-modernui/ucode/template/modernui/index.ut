@@ -1,28 +1,38 @@
 {%
-  include('header');
-  const session = ctx.authsession;
-  const base_url = request.canonical;
+  let auth_session = '';
+  if (typeof ctx == 'object' && ctx != null) {
+    auth_session = ctx.authsession || '';
+  }
+  if (!auth_session && typeof session == 'string') {
+    auth_session = session;
+  }
+  let base_url = (typeof request == 'object' && request != null) ? (request.canonical || '') : '';
+  let ver = (typeof luci == 'object' && luci != null) ? (luci.version || '25.10') : '25.10';
 %}
-
-<div id="modernui-root"
-     data-session="{{ session }}"
-     data-base-url="{{ base_url }}"
-     data-luci-version="{{ luci.version ?? '0.0' }}"
-     class="min-h-screen bg-background text-foreground">
-  <!-- React app mounts here -->
-  <div id="modernui-loading" style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:system-ui;">
-    <div style="text-align:center;">
-      <div style="width:40px;height:40px;border:3px solid #e2e8f0;border-top-color:#6366f1;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 12px;"></div>
-      <p style="color:#64748b;font-size:14px;">Loading ModernUI...</p>
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ModernUI - OpenWrt</title>
+  <link rel="stylesheet" href="/luci-static/modernui-app/assets/index.css">
+</head>
+<body class="bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100">
+  <div id="modernui-root"
+       data-session="{{ auth_session }}"
+       data-base-url="{{ base_url }}"
+       data-luci-version="{{ ver }}"
+       class="min-h-screen bg-background text-foreground">
+    <!-- React app mounts here -->
+    <div id="modernui-loading" style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:system-ui;">
+      <div style="text-align:center;">
+        <div style="width:40px;height:40px;border:3px solid #e2e8f0;border-top-color:#6366f1;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 12px;"></div>
+        <p style="color:#64748b;font-size:14px;">Loading ModernUI...</p>
+      </div>
+      <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
     </div>
-    <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
   </div>
-</div>
 
-<!-- Vite build output -->
-<link rel="stylesheet" href="/luci-static/modernui-app/assets/index.css">
-<script type="module" src="/luci-static/modernui-app/assets/index.js"></script>
-
-{%
-  include('footer');
-%}
+  <script type="module" src="/luci-static/modernui-app/assets/index.js"></script>
+</body>
+</html>

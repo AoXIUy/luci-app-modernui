@@ -121,16 +121,11 @@
     <h1>Sign In</h1>
     <p class="subtitle">Enter your credentials to access the dashboard</p>
 
-    {%
-      if (request.failed) {
-    %}
+    {% if (typeof failed == 'boolean' && failed): %}
     <div class="error">Invalid username or password. Please try again.</div>
-    {%
-      }
-    %}
+    {% endif %}
 
-    <form method="post" action="{{ request.action }}">
-      <input type="hidden" name="luci_magic" value="{{ request.magic }}">
+    <form method="post" action="">
       <div class="field">
         <label for="luci_username">Username</label>
         <input type="text" id="luci_username" name="luci_username"
