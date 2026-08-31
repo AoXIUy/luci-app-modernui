@@ -1,4 +1,4 @@
-﻿import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { AlertTriangle, X, Maximize2, Minimize2, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -8,8 +8,8 @@ import { rpc } from '@/rpc';
 import { toast } from 'sonner';
 
 // xterm.js is loaded dynamically to keep the initial bundle small
-type XTerm = import('@xterm/xterm').Terminal;
-type FitAddon = import('@xterm/addon-fit').FitAddon;
+import type { Terminal as XTerm } from '@xterm/xterm';
+import type { FitAddon } from '@xterm/addon-fit';
 
 const POLL_INTERVAL_MS = 100;
 

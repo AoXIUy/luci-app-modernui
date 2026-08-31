@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { RefreshCw, Cpu, MemoryStick, Thermometer, Clock, Activity, Wifi, Users } from 'lucide-react';
+import { RefreshCw, Cpu, MemoryStick, Thermometer, Clock, Wifi, Users } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
