@@ -43,7 +43,7 @@ export function Dashboard() {
       setInterfaces(netStatus.interfaces);
       setLeases(dhcp.leases);
       setTrafficHistory((prev) => {
-        const next = [...prev, { ts: traffic.ts, rx: traffic.rx_bytes, tx: traffic.tx_bytes }];
+        const next = [...prev, { ts: traffic.ts, rx: traffic.rx, tx: traffic.tx }];
         return next.slice(-MAX_TRAFFIC_SAMPLES);
       });
       setLastUpdate(new Date());

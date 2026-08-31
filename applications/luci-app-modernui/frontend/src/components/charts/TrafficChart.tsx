@@ -80,7 +80,7 @@ export function TrafficChart({ data, className }: TrafficChartProps) {
           legend: { display: false },
           tooltip: {
             callbacks: {
-              label: (ctx) => ` ${ctx.dataset.label}: ${formatBytes(ctx.parsed.y)}/s`,
+              label: (ctx) => ` ${ctx.dataset.label}: ${formatBytes(ctx.parsed.y ?? 0)}/s`,
             },
           },
         },
