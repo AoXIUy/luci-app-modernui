@@ -64,4 +64,16 @@ define Package/luci-app-modernui/install
 		$(1)/lib/upgrade/keep.d/
 endef
 
+define Package/luci-app-modernui/postinst
+#!/bin/sh
+[ -n "$${IPKG_INSTROOT}" ] || {
+	uci -q set luci.themes.ModernUI='/luci-static/modernui'
+	uci -q set luci.main.mediaurlbase='/luci-static/modernui-app'
+	uci -q set luci.main.defaulttheme='modernui'
+	uci commit luci
+	/etc/init.d/rpcd reload 2>/dev/null || true
+}
+exit 0
+endef
+
 $(eval $(call BuildPackage,luci-app-modernui))

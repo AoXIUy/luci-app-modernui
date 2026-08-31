@@ -1,0 +1,8 @@
+﻿#!/bin/sh
+
+uci -q get luci.themes.ModernUI >/dev/null || {
+	uci set luci.themes.ModernUI='/luci-static/modernui'
+	uci commit luci
+}
+
+exit 0

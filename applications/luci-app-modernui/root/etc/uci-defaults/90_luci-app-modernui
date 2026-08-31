@@ -2,7 +2,8 @@
 # UCI defaults for luci-app-modernui
 # Runs once after package installation
 
-# Set ModernUI as the default LuCI theme
+# Set ModernUI in luci.themes and as the default LuCI theme
+uci -q set luci.themes.ModernUI='/luci-static/modernui'
 uci -q set luci.main.mediaurlbase='/luci-static/modernui-app'
 uci -q set luci.main.defaulttheme='modernui'
 

@@ -30,6 +30,20 @@ define Package/luci-theme-modernui/install
 	$(INSTALL_DIR) $(1)/usr/share/ucode/luci/template/themes/modernui
 	$(INSTALL_DATA) ./root/usr/share/ucode/luci/template/themes/modernui/sysauth.ut \
 		$(1)/usr/share/ucode/luci/template/themes/modernui/
+	$(INSTALL_DIR) $(1)/etc/uci-defaults
+	$(INSTALL_BIN) ./root/etc/uci-defaults/30_luci-theme-modernui \
+		$(1)/etc/uci-defaults/
+endef
+
+define Package/luci-theme-modernui/postinst
+#!/bin/sh
+[ -n "$${IPKG_INSTROOT}" ] || {
+	uci -q get luci.themes.ModernUI >/dev/null || {
+		uci set luci.themes.ModernUI='/luci-static/modernui'
+		uci commit luci
+	}
+}
+exit 0
 endef
 
 $(eval $(call BuildPackage,luci-theme-modernui))
