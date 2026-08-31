@@ -1,4 +1,4 @@
-﻿import { useEffect } from 'react';
+import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { NavLink, useLocation } from 'react-router-dom';
 import {
@@ -51,8 +51,7 @@ export function MobileDrawer({ open, onClose }: MobileDrawerProps) {
   // Close drawer on route change
   useEffect(() => {
     if (open) onClose();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.pathname]);
+  }, [location.pathname, open, onClose]);
 
   // Close on Escape key
   useEffect(() => {

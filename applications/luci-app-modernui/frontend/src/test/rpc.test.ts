@@ -17,6 +17,7 @@ vi.mock('@/rpc', () => ({
     createConsoleSession: vi.fn(),
     sendConsoleInput: vi.fn(),
     destroyConsoleSession: vi.fn(),
+    resizeConsole: vi.fn(),
   },
 }));
 

@@ -22,16 +22,18 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Cache node_modules
+      - name: Cache npm global cache
         uses: actions/cache@v4
         with:
-          path: applications/luci-app-modernui/frontend/node_modules
-          key: node-modules-${{ hashFiles('applications/luci-app-modernui/frontend/package.json') }}
+          path: ~/.npm
+          key: npm-cache-${{ hashFiles('applications/luci-app-modernui/frontend/package.json') }}
           restore-keys: |
-            node-modules-
+            npm-cache-
 
       - name: Install dependencies
-        run: npm install --legacy-peer-deps
+        run: |
+          npm install --legacy-peer-deps
+          chmod -R +x node_modules/.bin || true
 
       - name: Lint
         run: npm run lint
