@@ -1,4 +1,4 @@
-﻿# Makefile — modernui-console OpenWrt package
+# Makefile — modernui-console OpenWrt package
 
 include $(TOPDIR)/rules.mk
 
@@ -20,6 +20,11 @@ define Package/modernui-console/description
   Manages shell sessions behind a root-only UNIX socket at
   /var/run/modernui-console.sock. Supports up to 5 concurrent sessions
   with UUID session IDs and token-based authentication.
+endef
+
+define Build/Prepare
+	$(INSTALL_DIR) $(PKG_BUILD_DIR)/src
+	$(CP) ./src/* $(PKG_BUILD_DIR)/src/
 endef
 
 define Build/Compile

@@ -28,17 +28,19 @@ define Build/Prepare
 	$(CP) ./ucode $(PKG_BUILD_DIR)/
 endef
 
+define Build/Configure
+endef
+
 define Build/Compile
-	cd $(PKG_BUILD_DIR)/frontend && \
-		npm install --legacy-peer-deps && \
-		npm run typecheck && \
-		npm run build
 endef
 
 define Package/luci-app-modernui/install
 	$(INSTALL_DIR) $(1)/www/luci-static/modernui-app
-	$(CP) $(PKG_BUILD_DIR)/frontend/dist/* \
-		$(1)/www/luci-static/modernui-app/
+	if [ -d $(PKG_BUILD_DIR)/frontend/dist ]; then \
+		$(CP) $(PKG_BUILD_DIR)/frontend/dist/* $(1)/www/luci-static/modernui-app/; \
+	elif [ -d ./frontend/dist ]; then \
+		$(CP) ./frontend/dist/* $(1)/www/luci-static/modernui-app/; \
+	fi
 	$(INSTALL_DIR) $(1)/usr/share/rpcd/ucode
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/root/usr/share/rpcd/ucode/modernui.uc \
 		$(1)/usr/share/rpcd/ucode/
